@@ -28,6 +28,14 @@ const LogInModal = () => {
         )
     }
 
+    const handleGuestLogIn = async( ) => {
+        await signInWithEmailAndPassword(
+            auth,
+            "guest000@gmail.com",
+            "12345678"
+        )
+    }
+
 
     return (
         <>
@@ -84,6 +92,7 @@ const LogInModal = () => {
 
                         <button
                             className='w-full bg-primary text-white h-12 rounded-full shadow-sm mb-5 '
+                            onClick={() => handleGuestLogIn()}
                         >
                             Log In as Guest
                         </button>
