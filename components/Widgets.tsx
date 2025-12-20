@@ -4,7 +4,7 @@ import React from 'react'
 
 function Widgets() {
   return (
-    <div className='p-3 hidden lg:flex flex-col 
+    <div className='p-3 ps-10 hidden lg:flex flex-col 
     space-y-4 w-[400px]'>
 
       <div className='flex bg-[#EFF3F4] text-grayyy h-11 items-center

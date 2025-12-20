@@ -4,7 +4,8 @@ import React from 'react'
 
 const PostInput = () => {
     return (
-        <div className='flex flex-row space-x-5 p-3'>
+        <div className='flex flex-row space-x-5 p-3 border-b
+        border-gray-100'>
             <Image 
                 src="/assets/wave-sec-logo.png" 
                 width={44}
@@ -15,7 +16,7 @@ const PostInput = () => {
                 <textarea name="" id=""
                     className='resize-none outline-none w-full min-h-[50px] text-lg'
                     placeholder="What's happening"></textarea>
-                <div className='flex flex-row justify-between pt-5'>
+                <div className='flex flex-row justify-between pt-5 border-t border-gray-100'>
                     <div className='flex flex-row space-x-2'>
                         <PhotoIcon className='w-[22px] h-[22px] text-primary' />
                         <ChartBarIcon className='w-[22px] h-[22px] text-primary' />
