@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { closeSignUpModal, openSignUpModal } from '@/redux/slices/modalSlice'
 import { EyeIcon, EyeSlashIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from 'firebase/auth'
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '@/firebase'
 import { signInUser, signOutUser } from '@/redux/slices/userSlice'
 
@@ -65,6 +65,13 @@ const SignUpModal = () => {
 
     }, [])
 
+    const handleGuestLogIn = async () => {
+        await signInWithEmailAndPassword(
+            auth,
+            "guest000@gmail.com",
+            "12345678"
+        )
+    }
 
     return (
         <>
@@ -130,6 +137,7 @@ const SignUpModal = () => {
 
                         <button
                             className='w-full bg-primary text-white h-12 rounded-full shadow-sm mb-5 '
+                            onClick={() => handleGuestLogIn()}
                         >
                             Log In as Guest
                         </button>
