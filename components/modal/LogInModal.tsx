@@ -1,115 +1,69 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Modal } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
-import { closeSignUpModal, openSignUpModal } from '@/redux/slices/modalSlice'
+import { closeLogInModal, openLogInModal } from '@/redux/slices/modalSlice'
 import { EyeIcon, EyeSlashIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/firebase'
-import { signInUser, signOutUser } from '@/redux/slices/userSlice'
 
-const SignUpModal = () => {
-    const [name, setName] = useState("");
+const LogInModal = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPass, setShowPass] = useState(false);
 
     const isOpen = useSelector((state: RootState) => {
-        return state.modals.signUpModalOpen
+        return state.modals.logInModalOpen
     })
 
     const dispatch: AppDispatch = useDispatch()
 
-    const handleSignUp = async () => {
-        const userCredentials = await createUserWithEmailAndPassword(
+    const handleLogIn = async() => {
+        await signInWithEmailAndPassword(
             auth,
             email,
             password
         )
-
-        await updateProfile(
-            userCredentials.user, {
-            displayName: name
-        }
-        )
-
-        dispatch(
-            signInUser({
-                name: userCredentials.user.displayName,
-                username: userCredentials.user.email!.split("@")[0],
-                email: userCredentials.user.email,
-                uid: userCredentials.user.uid
-            })
-        )
     }
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(
-            auth,
-            (currentUser) => {
-                if (!currentUser) return
-
-                // handle redux actions
-                dispatch(signInUser({
-                    name: currentUser.displayName,
-                    username: currentUser.email!.split("@")[0],
-                    email: currentUser.email,
-                    uid: currentUser.uid
-                }))
-            }
-        )
-
-        return unsubscribe
-
-    }, [])
 
 
     return (
         <>
-            <button className='text-secondary w-full h-12  bg-white md:w-20 md:h-10 text-md md:text-sm font-bold
-            rounded-full' onClick={() => dispatch(openSignUpModal())}
-            >
-                Sign Up
+            <button className=' w-full h-12 md:h-10 md:w-20 text-md md:text-sm border-2
+            border-gray-100 rounded-full text-white font-bold hover:bg-white hover:bg-opacity-25
+            transition' onClick={()=> dispatch(openLogInModal())}>
+                Log In
             </button>
 
             <Modal open={isOpen} onClose={() =>
-                dispatch(closeSignUpModal())}
+                dispatch(closeLogInModal())}
                 className='flex justify-center items-center'>
                 <div className='w-full h-full bg-white
                     sm:w-[600px] sm:h-fit sm:rounded-xl'
                 >
                     <XMarkIcon className='w-7 mt-5 ms-5 cursor-pointer'
-                        onClick={() => dispatch(closeSignUpModal())} />
+                        onClick={()=> dispatch(closeLogInModal())}/>
                     <div className='pt-10 pb-20 px-4 sm:px-20'>
                         <h1 className='text-3xl font-bold mb-10'>
-                            Create Your Account
+                            Log Into The Wave
                         </h1>
 
                         <div className='w-full space-y-5 mb-10'>
-                            <input type="text" className='w-full h-[54px] border border-gray-200 outline-none
-                            ps-3 rounded-[4px] focus:border-primary transition'
-                                placeholder='Name'
-                                onChange={(e) => setName(e.target.value)}
-                                value={name}
-                            />
-
                             <input type="email" className='w-full h-[54px] border border-gray-200 outline-none
                             ps-3 rounded-[4px] focus:border-primary transition'
                                 placeholder='Email'
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
+                                onChange={(e)=> setEmail(e.target.value)}
+                                value={email}     
                             />
-
                             <div className='w-full h-[54px] border border-gray-200 outline-none
                              rounded-[4px] focus-within:border-primary transition flex items-center pr-3 overflow-hidden'>
                                 <input type={showPass ? "text" : "password"}
-                                    placeholder='Password' className='ps-3 w-full h-full outline-none'
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    value={password}
+                                   placeholder='Password' className='ps-3 w-full h-full outline-none' 
+                                   onChange={(e)=> setPassword(e.target.value)}
+                                   value={password}
                                 />
-
                                 <div
                                     onClick={() => setShowPass(!showPass)}
                                     className='w-7 h-7 text-gray-400 cursor-pointer'>
@@ -121,9 +75,9 @@ const SignUpModal = () => {
 
                         <button
                             className='w-full bg-primary text-white h-12 rounded-full shadow-sm mb-5 '
-                            onClick={() => handleSignUp()}
+                            onClick={()=> handleLogIn()}
                         >
-                            Sign Up
+                            Log In
                         </button>
 
                         <span className='mb-5 text-sm text-center block'>Or</span>
@@ -141,4 +95,4 @@ const SignUpModal = () => {
     )
 }
 
-export default SignUpModal
+export default LogInModal

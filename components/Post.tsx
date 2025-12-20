@@ -4,7 +4,7 @@ import React from 'react'
 
 const Post = () => {
     return (
-        <div>
+        <div className='border-b border-gray-100'>
             <PostHeader />
 
             <div className='ml-16 p-3 flex space-x-14'>

@@ -9,11 +9,18 @@ import {
     EllipsisHorizontalCircleIcon
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import { signOut } from 'firebase/auth'
+import { auth } from '@/firebase'
+import { useDispatch } from 'react-redux'
+import SidebarUserInfo from './SidebarUserInfo'
 
 const Sidebar = () => {
+
+    
+
     return (
         <nav className='h-screen hidden sm:flex flex-col sticky top-0 p-3 xl:ml-20'>
-            <div className='relative h-full'>
+            <div className='relative h-full flex flex-col items-center xl:items-start'>
                 <div className='py-3 '>
                     <Image src='/assets/wave-main-logo.png' width={60} height={60}
                         alt='This is a logo' className=''/>
@@ -32,9 +39,7 @@ const Sidebar = () => {
                     </button>
 
                 </ul>
-                <div className='absolute bottom-0'>
-                    User Info
-                </div>
+                <SidebarUserInfo />
             </div>
         </nav>
     )
