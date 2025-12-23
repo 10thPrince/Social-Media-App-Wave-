@@ -8,12 +8,16 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-const PostInput = () => {
+interface PostInputProps {
+    insideModal?: boolean
+}
+
+const PostInput = ({ insideModal }: PostInputProps) => {
     const [text, setText] = useState('');
     const user = useSelector((state: RootState) => state.user)
 
-    const handlePost = async() => {
-        await addDoc(collection(db,  "posts"), {
+    const handlePost = async () => {
+        await addDoc(collection(db, "posts"), {
             text: text,
             name: user.name,
             username: user.username,
@@ -25,21 +29,28 @@ const PostInput = () => {
         setText('');
     }
 
+
+
     return (
         <div className='flex flex-row space-x-5 p-3 border-b
         border-gray-100'>
-            <Image 
-                src="/assets/wave-sec-logo.png" 
+
+            <Image
+                src={insideModal ? "/assets/profile-picture.png" : "/assets/wave-sec-logo.png"}
                 width={44}
-                height={44} 
-                alt='The Main Logo'
-                className='w-11 h-11' />
+                height={44}
+                alt={insideModal ? 'The Profile Picture' : 'The Main Logo'}
+                className={insideModal ? 'w-11 h-11 rounded-full z-10' : 'w-11 h-11'} />
             <div className='w-full'>
                 <textarea name="" id=""
                     className='resize-none outline-none w-full min-h-[50px] text-lg'
-                    placeholder="What's happening"
+                    placeholder={insideModal ? 'Send your Reply' : "What's happening"}
                     onChange={(e) => setText(e.target.value)}
-                    value={text}></textarea>
+                    value={text}
+                >
+                </textarea>
+
+
                 <div className='flex flex-row justify-between pt-5 border-t border-gray-100'>
                     <div className='flex flex-row space-x-2'>
                         <PhotoIcon className='w-[22px] h-[22px] text-primary' />
@@ -50,8 +61,8 @@ const PostInput = () => {
                     </div>
                     <button className='text-white bg-[#1E88E5] w-20 h-[36px] rounded-full text-sm cursor-pointer 
                     disabled:bg-opacity-60 disabled:cursor-not-allowed'
-                    disabled={!text}
-                    onClick={() => handlePost()}>
+                        disabled={!text}
+                        onClick={() => handlePost()}>
                         Bumble
                     </button>
                 </div>
