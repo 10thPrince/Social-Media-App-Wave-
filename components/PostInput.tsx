@@ -1,8 +1,30 @@
+"use client"
+
+import { db } from '@/firebase'
+import { RootState } from '@/redux/store'
 import { CalendarIcon, ChartBarIcon, FaceSmileIcon, MapPinIcon, PhotoIcon } from '@heroicons/react/24/outline'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const PostInput = () => {
+    const [text, setText] = useState('');
+    const user = useSelector((state: RootState) => state.user)
+
+    const handlePost = async() => {
+        await addDoc(collection(db,  "posts"), {
+            text: text,
+            name: user.name,
+            username: user.username,
+            timestamp: serverTimestamp(),
+            likes: [],
+            comments: []
+        });
+
+        setText('');
+    }
+
     return (
         <div className='flex flex-row space-x-5 p-3 border-b
         border-gray-100'>
@@ -15,7 +37,9 @@ const PostInput = () => {
             <div className='w-full'>
                 <textarea name="" id=""
                     className='resize-none outline-none w-full min-h-[50px] text-lg'
-                    placeholder="What's happening"></textarea>
+                    placeholder="What's happening"
+                    onChange={(e) => setText(e.target.value)}
+                    value={text}></textarea>
                 <div className='flex flex-row justify-between pt-5 border-t border-gray-100'>
                     <div className='flex flex-row space-x-2'>
                         <PhotoIcon className='w-[22px] h-[22px] text-primary' />
@@ -24,7 +48,10 @@ const PostInput = () => {
                         <CalendarIcon className='w-[22px] h-[22px] text-primary' />
                         <MapPinIcon className='w-[22px] h-[22px] text-primary' />
                     </div>
-                    <button className='text-white bg-[#1E88E5] w-20 h-[36px] rounded-full text-sm cursor-pointer'>
+                    <button className='text-white bg-[#1E88E5] w-20 h-[36px] rounded-full text-sm cursor-pointer 
+                    disabled:bg-opacity-60 disabled:cursor-not-allowed'
+                    disabled={!text}
+                    onClick={() => handlePost()}>
                         Bumble
                     </button>
                 </div>
