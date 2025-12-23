@@ -54,9 +54,10 @@ interface PostHeaderProps {
     name: string;
     timestamp?: Timestamp;
     text: string;
+    replyTo?: string;
 }
 
-export const PostHeader = ({ username, name, timestamp, text }: PostHeaderProps) => {
+export const PostHeader = ({ username, name, timestamp, text, replyTo }: PostHeaderProps) => {
     return (
         <div className='flex p-3 space-x-5'>
             <Image
@@ -64,7 +65,7 @@ export const PostHeader = ({ username, name, timestamp, text }: PostHeaderProps)
                 width={44}
                 height={44}
                 alt='Profile Picture'
-                className='rounded-full w-11 h-11'
+                className='rounded-full w-11 h-11 z-10'
             />
 
             <div className='text-[15px] flex flex-col space-y-2'>
@@ -94,6 +95,17 @@ export const PostHeader = ({ username, name, timestamp, text }: PostHeaderProps)
                 <span>
                     {text}
                 </span>
+
+                {
+                    replyTo && (
+                        <span className='text-[15px] text-grayyy'>
+                            Replying to <span className='text-primary'>
+                                @{replyTo}
+                            </span>
+                        </span>
+                    )
+                }
+
             </div>
         </div>
     )

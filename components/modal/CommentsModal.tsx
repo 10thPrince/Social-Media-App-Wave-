@@ -19,7 +19,7 @@ const CommentsModal = () => {
     return (
         <>
             <ChatBubbleOvalLeftEllipsisIcon
-                className='w-6 h-6 cursor-pointer hover:text-primary transition' 
+                className='w-6 h-6 cursor-pointer hover:text-primary transition'
                 onClick={() => dispatch(openCommentModal())}
             />
 
@@ -27,18 +27,28 @@ const CommentsModal = () => {
 
             <Modal open={isOpen} onClose={() => dispatch(closeCommentModal())}
                 className=' flex justify-center items-center'>
-                <div className='bg-white w-full h-full sm:h-fit sm:w-[70%] sm:rounded-xl outline-none'>
+                <div className='bg-white w-full h-full sm:h-fit sm:w-[70%]
+                 sm:rounded-xl outline-none relative'
+                >
                     <XMarkIcon className='w-7 mt-5 ms-5 cursor-pointer'
-                        onClick={()=> dispatch(closeCommentModal())}
+                        onClick={() => dispatch(closeCommentModal())}
                     />
 
                     <div className='pt-5 pb-10 px-0 sm:px-5 flex flex-col'>
-                        <PostHeader 
+                        <PostHeader
                             name='Guest'
                             username='guest123'
                             text='helloooooo'
+                            replyTo='ntwari Prince'
                         />
-                        <PostInput />
+                        <div className='mt-4'>
+                            <PostInput
+                                insideModal={true}
+                            />
+                        </div>
+                        <div className='absolute w-0.5 h-32 bg-gray-300 
+                            left-[33px] sm:left-[53px] top-20 z-0'
+                        ></div>
                     </div>
                 </div>
             </Modal>
