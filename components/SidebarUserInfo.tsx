@@ -23,9 +23,9 @@ const SidebarUserInfo = () => {
 
     }
     return (
-        <div className='absolute bottom-3 flex space-x-3 items-center
+        <div className='absolute bottom-3 flex space-x-3 items-center justify-start
                     hover:bg-gray-500 hover:bg-opacity-10 xl:py-3 xl:px-5 rounded-full
-                    cursor-pointer'
+                    cursor-pointer w-fit'
                     onClick={() => handleSignOut()}
         >
             <Image
@@ -34,11 +34,11 @@ const SidebarUserInfo = () => {
                 height={36}
                 alt="Profile Picture"
                 className='w-9 h-9 rounded-full' />
-            <div className='hidden xl:flex flex-col text-sm'>
-                <span className='font-bold'>
+            <div className='hidden max-w-32 xl:flex flex-col text-sm'>
+                <span className='whitespace-nowrap text-ellipsis overflow-hidden font-bold'>
                     {user.name}
                 </span>
-                <span className='text-gray-500'>
+                <span className='whitespace-nowrap text-ellipsis overflow-hidden text-gray-500'>
                     @{user.username}
                 </span>
             </div>
