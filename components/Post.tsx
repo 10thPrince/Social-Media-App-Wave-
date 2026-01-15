@@ -4,12 +4,16 @@ import Image from 'next/image'
 import React from 'react'
 import Moment from 'react-moment'
 import CommentsModal from './modal/CommentsModal'
+import { openCommentModal, setCommentDeatails } from '@/redux/slices/modalSlice'
+import { useDispatch } from 'react-redux'
 
 interface PostProps {
-    data: DocumentData
+    data: DocumentData,
+    id: String
 }
 
-const Post = ({ data }: PostProps) => {
+const Post = ({ data, id }: PostProps) => {
+    const dispatch = useDispatch();
     return (
         <div className='border-b border-gray-100'>
             <PostHeader
@@ -20,12 +24,21 @@ const Post = ({ data }: PostProps) => {
 
             <div className='ml-16 p-3 flex space-x-14'>
                 <div className='relative'>
-                    <CommentsModal />
-                    {/* <ChatBubbleOvalLeftEllipsisIcon
+                    
+                    <ChatBubbleOvalLeftEllipsisIcon
+                        onClick={() => {
+                            dispatch(setCommentDeatails({
+                                name: data.name,
+                                username: data.username,
+                                id: id,
+                                text: data.text
+                            }))
+                            dispatch(openCommentModal())
+                        }}
                         className='w-6 h-6 cursor-pointer hover:text-primary transition' />
                     <span className='absolute text-xs top-1 -right-3'>
                         2
-                    </span> */}
+                    </span>
                 </div>
                 <div className='relative'>
                     <HeartIcon
