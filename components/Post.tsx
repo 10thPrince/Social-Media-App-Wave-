@@ -1,15 +1,17 @@
 "use client"
 
 import { ArrowUpTrayIcon, ChartBarIcon, ChatBubbleOvalLeftEllipsisIcon, HeartIcon } from '@heroicons/react/24/outline'
-import { arrayUnion, doc, DocumentData, Timestamp, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, DocumentData, Timestamp, updateDoc } from 'firebase/firestore'
+import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import React from 'react'
 import Moment from 'react-moment'
 import CommentsModal from './modal/CommentsModal'
-import { openCommentModal, setCommentDeatails } from '@/redux/slices/modalSlice'
+import { openCommentModal, openLogInModal, setCommentDeatails } from '@/redux/slices/modalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Link from 'next/link'
 import { db } from '@/firebase'
+import { RootState } from '@/redux/store'
 
 
 
@@ -23,12 +25,23 @@ const Post = ({ data, id }: PostProps) => {
 
     const user = useSelector((state: RootState) => state.user);
 
-    const likePost = async() => {
+    const likePost = async () => {
+        if(!user.username){
+            dispatch(openLogInModal());
+            return;
+        }
+
         const postRef = doc(db, 'posts', id);
 
-        await updateDoc(postRef, {
-            likes:arrayUnion(user.uid)
-        })
+        if (data.likes.includes(user.uid)) {
+            await updateDoc(postRef, {
+                likes: arrayRemove(user.uid)
+            })
+        } else {
+            await updateDoc(postRef, {
+                likes: arrayUnion(user.uid)
+            })
+        }
     }
 
     return (
@@ -47,6 +60,10 @@ const Post = ({ data, id }: PostProps) => {
 
                     <ChatBubbleOvalLeftEllipsisIcon
                         onClick={() => {
+                            if(!user.username){
+                                dispatch(openLogInModal());
+                                return;
+                            }
                             dispatch(setCommentDeatails({
                                 name: data.name,
                                 username: data.username,
@@ -56,17 +73,31 @@ const Post = ({ data, id }: PostProps) => {
                             dispatch(openCommentModal())
                         }}
                         className='w-6 h-6 cursor-pointer hover:text-primary transition' />
-                    <span className='absolute text-xs top-1 -right-3'>
-                        2
-                    </span>
+                    {
+                        data.comments.length > 0 &&
+                        <span className='absolute text-xs top-1 -right-3'>
+                            {data.comments.length}
+                        </span>
+                    }
+
                 </div>
                 <div className='relative'>
-                    <HeartIcon
-                        className='w-6 h-6 cursor-pointer hover:text-primary transition'
-                        onClick={() => likePost()} />
-                    <span className='absolute text-xs top-1 -right-3'>
-                        2
-                    </span>
+                    {
+                        data.likes.includes(user.uid) ?
+                            <HeartSolidIcon className='w-6 cursor-pointer text-pink-500 transition'
+                                onClick={() => likePost()} /> :
+                            <HeartIcon
+                                className='w-6 h-6 cursor-pointer hover:text-pink-500 transition'
+                                onClick={() => likePost()} />
+                    }
+
+                    {
+                        data.likes.length > 0 &&
+                        <span className='absolute text-xs top-1 -right-3'>
+                            {data.likes.length}
+                        </span>
+                    }
+
                 </div>
                 <div className='relative'>
                     <ChartBarIcon

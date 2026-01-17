@@ -13,7 +13,7 @@ const SignUpPrompt = () => {
 
   return (
     !name &&
-    <div className='h-20 fixed w-full bg-primary bottom-0 flex items-center justify-center
+    <div className='h-20 fixed w-full bg-primary z-50 bottom-0 flex items-center justify-center
     md:space-x-5 lg:justify-between lg:px-20 xl:px-40 2xl:px-80'>
         <div className='hidden md:flex flex-col text-white'>
             <span className='text-xl font-bold'>
