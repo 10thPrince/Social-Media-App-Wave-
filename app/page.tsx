@@ -3,6 +3,7 @@ import Widgets from '@/components/Widgets';
 import Postfed from '@/components/Postfed';
 import SignUpPrompt from '@/components/SignUpPrompt';
 import CommentsModal from '@/components/modal/CommentsModal';
+import LoadingScreen from '@/components/LoadingScreen';
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
       </div>
       <CommentsModal />
       <SignUpPrompt />
-
+      <LoadingScreen />
     </>
 
   );

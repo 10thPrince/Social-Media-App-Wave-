@@ -5,9 +5,12 @@ import PostInput from './PostInput'
 import Post from './Post'
 import { collection, DocumentData, onSnapshot, orderBy, query, QueryDocumentSnapshot } from 'firebase/firestore'
 import { db } from '@/firebase'
+import { useDispatch } from 'react-redux'
+import { closeLoadingScreen } from '@/redux/slices/loadingSlice'
 
 function Postfed() {
   const [posts, setPosts] = useState<QueryDocumentSnapshot<DocumentData, DocumentData>[]>([]);
+  const dispatch = useDispatch();
 
   
 
@@ -19,6 +22,7 @@ function Postfed() {
       const snapshotDocs = snapshot.docs;
 
       setPosts(snapshotDocs);
+      dispatch(closeLoadingScreen());
     })
 
     return unsubscribe
