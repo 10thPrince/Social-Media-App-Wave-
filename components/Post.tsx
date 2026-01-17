@@ -1,11 +1,17 @@
+"use client"
+
 import { ArrowUpTrayIcon, ChartBarIcon, ChatBubbleOvalLeftEllipsisIcon, HeartIcon } from '@heroicons/react/24/outline'
-import { DocumentData, Timestamp } from 'firebase/firestore'
+import { arrayUnion, doc, DocumentData, Timestamp, updateDoc } from 'firebase/firestore'
 import Image from 'next/image'
 import React from 'react'
 import Moment from 'react-moment'
 import CommentsModal from './modal/CommentsModal'
 import { openCommentModal, setCommentDeatails } from '@/redux/slices/modalSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import Link from 'next/link'
+import { db } from '@/firebase'
+
+
 
 interface PostProps {
     data: DocumentData,
@@ -14,17 +20,31 @@ interface PostProps {
 
 const Post = ({ data, id }: PostProps) => {
     const dispatch = useDispatch();
+
+    const user = useSelector((state: RootState) => state.user);
+
+    const likePost = async() => {
+        const postRef = doc(db, 'posts', id);
+
+        await updateDoc(postRef, {
+            likes:arrayUnion(user.uid)
+        })
+    }
+
     return (
         <div className='border-b border-gray-100'>
-            <PostHeader
-                username={data.username}
-                name={data.name}
-                timestamp={data.timestamp}
-                text={data.text} />
+            <Link href={'/' + id}>
+                <PostHeader
+                    username={data.username}
+                    name={data.name}
+                    timestamp={data.timestamp}
+                    text={data.text} />
+
+            </Link>
 
             <div className='ml-16 p-3 flex space-x-14'>
                 <div className='relative'>
-                    
+
                     <ChatBubbleOvalLeftEllipsisIcon
                         onClick={() => {
                             dispatch(setCommentDeatails({
@@ -42,7 +62,8 @@ const Post = ({ data, id }: PostProps) => {
                 </div>
                 <div className='relative'>
                     <HeartIcon
-                        className='w-6 h-6 cursor-pointer hover:text-primary transition' />
+                        className='w-6 h-6 cursor-pointer hover:text-primary transition'
+                        onClick={() => likePost()} />
                     <span className='absolute text-xs top-1 -right-3'>
                         2
                     </span>
